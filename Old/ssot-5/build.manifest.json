@@ -1,0 +1,16 @@
+{
+  "output": "SSOT.md",
+  "order": [
+    "core/00-router.md",
+    "core/01-risks.md",
+    "core/02-devcontainer.md",
+    "blueprints/orchestrator.md",
+    "blueprints/cicd-analyst.md",
+    "blueprints/adaptive-learning.md",
+    "blueprints/documenter.md",
+    "blueprints/guardian.md",
+    "blueprints/janitor.md",
+    "blueprints/tester.md"
+  ],
+  "separator": "\n\n---\n\n"
+}

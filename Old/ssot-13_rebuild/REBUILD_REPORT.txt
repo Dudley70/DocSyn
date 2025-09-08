@@ -1,0 +1,8 @@
+ZIP opened: OK — 162 entries; top-level: ['__MACOSX', 'ssot-13']
+Core files: OK — []
+Blueprint files: OK — []
+Compiled PartA_Core.md: OK — 1 chars
+Compiled PartB_Blueprints.md: OK — 1 chars; polluted_detected=0
+Compiled SSOT.md: OK — 67 chars
+Created tools/merge_config.yaml: OK — placed in compiled/ for convenience
+Wrote build.manifest.json: OK — compiled/build.manifest.json

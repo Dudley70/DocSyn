@@ -1,0 +1,10 @@
+input_dir: "input"
+staging_dir: "curator/staging"
+diffs_dir: "curator/diffs"
+core_dir: "core"
+blueprints_dir: "blueprints"
+dist_dir: "dist"
+branch_prefix: "curator"
+max_files_per_pr: 6
+max_loc_per_pr: 2000
+require_core_owner_review: true

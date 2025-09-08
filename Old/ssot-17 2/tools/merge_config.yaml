@@ -1,0 +1,9 @@
+IGNORE_HEADINGS:
+  - "Query-Pattern Matrix (Router)"
+  - "Unified Risk & Control Model"
+  - "Standard Development Environment"
+  - "Agent Query Index"
+SNIPPET_LIMIT: 2000
+DEDUP_HEADINGS: true
+BLOCK_RECURSIVE_INPUTS: true
+HALT_ON_DUPLICATE_GLOBALS: true

@@ -1,0 +1,23 @@
+name: Build SSOT
+
+on:
+  push:
+    paths: ['core/**', 'blueprints/**', 'build.manifest.json', 'scripts/**', 'Makefile']
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Assemble SSOT
+        run: make ci
+      - name: Lint Markdown (mdl)
+        uses: actionshub/markdownlint@main
+        with:
+          files: .
+      - name: Upload SSOT artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: SSOT
+          path: SSOT.md

@@ -1,0 +1,25 @@
+{
+  "deterministic": true,
+  "curated_sources": [
+    "core/00-router.md",
+    "core/01-risks.md",
+    "core/02-devcontainer.md",
+    "blueprints/documenter.md",
+    "blueprints/guardian.md",
+    "blueprints/janitor.md",
+    "blueprints/tester.md",
+    "blueprints/cicd-analyst.md",
+    "blueprints/adaptive-learning.md",
+    "blueprints/orchestrator.md"
+  ],
+  "outputs": [
+    "dist/SSOT.md",
+    "dist/PartA_Core.md",
+    "dist/PartB_Blueprints.md"
+  ],
+  "governance": {
+    "config": "tools/merge_config.yaml",
+    "dedup_headings": true,
+    "block_recursive_inputs": true
+  }
+}

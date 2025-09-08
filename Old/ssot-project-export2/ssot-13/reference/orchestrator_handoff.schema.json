@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Orchestrator Handoff",
+  "type": "object",
+  "properties": {
+    "taskId": { "type": "string" },
+    "agent": { "type": "string" },
+    "input": { "type": "object" },
+    "next": { "type": "string" }
+  },
+  "required": ["taskId","agent","input"]
+}
