@@ -1,5 +1,0 @@
-# Adaptive-Learning
-
----
-
-> **

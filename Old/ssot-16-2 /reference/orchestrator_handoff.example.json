@@ -1,6 +1,0 @@
-{
-  "taskId": "DOC-001",
-  "agent": "documenter",
-  "input": { "path": "." },
-  "next": "tester"
-}

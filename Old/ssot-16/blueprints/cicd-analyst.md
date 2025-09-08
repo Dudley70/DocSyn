@@ -1,2 +1,0 @@
-# Cicd Analyst
-
