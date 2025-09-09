@@ -1,15 +1,15 @@
 # DocSyn Project Status
 
 ## Current System State
-**Phase:** Document Synthesis System - Ready for Next Batch  
+**Phase:** v1.1.1 Tagged Release - All Systems Verified ✅  
 **Key Components:** 
-- Document Synthesiser: Takes multiple documents (any topic) as input
-- Processing scripts: Convert raw sources → curated sections → single compiled output
-- System ready for next document batch processing
-- Output: dist/DocSyn_Compiled.md for integration
+- Document Synthesiser: Auto-anchor creation with HITL router suggestions
+- QA Guardrails: Forbidden terms, baseline verify, structural integrity checks
+- Deterministic builds: UTF-8/NFC normalization, reproducible outputs (SHA256: 2cb6b5cf)
+- Production ready: 22/22 verification points passing
 
 **Last Validated:** 2025-09-09  
-**Status:** Working - Comprehensive documentation system with auto-consolidation
+**Status:** Tagged v1.1.1 - Structural recovery complete, ready for any document set
 
 ## Next Action
 **IMMEDIATE:** Ready for next document batch  

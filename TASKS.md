@@ -1,10 +1,10 @@
 # DocSyn Project Tasks & Priorities
 
-## Current Priority: Claude Code Automation Validation ⚡
-**Status:** Ready - GitHub setup complete, ready for testing  
-**Next Action:** Test standard execution pattern with timeout management  
-**Why:** Validate automation workflows before deployment  
-**Time:** 1 hour
+## Current Priority: CI & Protections Setup ⚡
+**Status:** Ready - v1.1.1 tagged, need GitHub Actions and CODEOWNERS  
+**Next Action:** Set up GitHub Actions workflow and protect main branch  
+**Why:** Ensure system integrity for future changes  
+**Time:** 30 minutes
 
 ## Active Work Queue
 
@@ -30,14 +30,23 @@
 - [x] Tested full CI pipeline - all functional
 - [x] Removed old SSOT.md file cleanly
 
-### 2. Claude Code Automation Validation ⚡ IMMEDIATE
-- [ ] Test standard execution pattern with timeout management
-- [ ] Verify authentication status and tool permissions
-- [ ] Validate JSON output parsing for programmatic use
-- [ ] Test background execution with progress monitoring
-- [ ] Document any execution failures or timeout issues
+### 1.7. [x] Merge & Tag v1.1.1 ⚡ COMPLETE
+- [x] Committed all verified changes to cleanup/next-batch
+- [x] Merged to main branch with fast-forward
+- [x] Verified clean build on main (all 22 verification points pass)
+- [x] Baseline verification confirmed (SHA256: 2cb6b5cf matches)
+- [x] Tagged v1.1.1 with comprehensive release notes
+- [x] Updated STATUS.md to reflect tagged release state
+- [x] System ready for CI setup and protection
 
-### 3. Agent Blueprint Testing & Validation 🎯 HIGH  
+### 2. CI & Protections Setup ⚡ IMMEDIATE
+- [ ] Create GitHub Actions workflow (.github/workflows/ci.yml)
+- [ ] Add workflow steps: make docsyn, verify_baseline.py, qa_build.py
+- [ ] Create CODEOWNERS file to protect curated paths
+- [ ] Enable branch protection on main (require PR + green checks)
+- [ ] Test workflow with a small PR
+
+### 3. Claude Code Automation Validation 🎯 HIGH  
 **Status:** Ready - All blueprints documented, need operational testing
 
 **Blueprints to Test:**
