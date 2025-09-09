@@ -8,10 +8,6 @@ Supports policy-aware validation for vendor-specific content.
 import re
 import json
 import sys
-try:
-    import yaml
-except ImportError:
-    yaml = None
 import unicodedata
 from pathlib import Path
 
@@ -23,17 +19,33 @@ COMPILED_FILE = DIST_DIR / "DocSyn_Compiled.md"
 FORBIDDEN_TERMS = ["Claude Code", "Claude AI", "Single Source of Truth"]
 MIN_BYTES_BLUEPRINT = 1000
 
-# Helper: read YAML front-matter if present
+# Helper: read YAML front-matter if present (basic parsing without yaml module)
 def read_front_matter(path: Path):
-    if yaml is None:
-        return {}  # Skip YAML parsing if module not available
+    """Basic front-matter parsing without YAML dependency."""
     try:
         text = path.read_text(encoding="utf-8")
         if text.startswith("---"):
             end = text.find("\n---", 3)
             if end != -1:
-                fm = text[3:end].strip()
-                return yaml.safe_load(fm) or {}
+                fm_text = text[3:end].strip()
+                # Basic key: value parsing (no complex YAML features)
+                fm = {}
+                for line in fm_text.split('\n'):
+                    line = line.strip()
+                    if ':' in line and not line.startswith('#'):
+                        key, value = line.split(':', 1)
+                        key = key.strip()
+                        value = value.strip().strip('"\'')
+                        # Handle boolean values
+                        if value.lower() == 'true':
+                            value = True
+                        elif value.lower() == 'false':
+                            value = False
+                        # Handle lists (basic)
+                        elif value.startswith('[') and value.endswith(']'):
+                            value = [item.strip().strip('"\'') for item in value[1:-1].split(',') if item.strip()]
+                        fm[key] = value
+                return fm
     except Exception:
         pass
     return {}
