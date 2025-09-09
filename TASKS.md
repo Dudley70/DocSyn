@@ -1,10 +1,10 @@
 # DocSyn Project Tasks & Priorities
 
-## Current Priority: CI & Protections Setup ⚡
-**Status:** Ready - v1.1.1 tagged, need GitHub Actions and CODEOWNERS  
-**Next Action:** Set up GitHub Actions workflow and protect main branch  
-**Why:** Ensure system integrity for future changes  
-**Time:** 30 minutes
+## Current Priority: Claude Code Automation Validation 🎯
+**Status:** Ready - Documentation updated, system in production state  
+**Next Action:** Test standard execution pattern with timeout management  
+**Why:** Validate automation workflows with comprehensive agent documentation system  
+**Time:** 1 hour
 
 ## Active Work Queue
 
@@ -30,23 +30,45 @@
 - [x] Tested full CI pipeline - all functional
 - [x] Removed old SSOT.md file cleanly
 
-### 1.7. [x] Merge & Tag v1.1.1 ⚡ COMPLETE
-- [x] Committed all verified changes to cleanup/next-batch
-- [x] Merged to main branch with fast-forward
-- [x] Verified clean build on main (all 22 verification points pass)
-- [x] Baseline verification confirmed (SHA256: 2cb6b5cf matches)
-- [x] Tagged v1.1.1 with comprehensive release notes
-- [x] Updated STATUS.md to reflect tagged release state
-- [x] System ready for CI setup and protection
+### 1.7. [x] Policy-Aware QA System Implementation ⚡ COMPLETE
+- [x] Modified scripts/qa_build.py with vendor-specific content classification
+- [x] Added front-matter parsing and policy evaluation functions  
+- [x] Implemented anchor file exemption from size requirements
+- [x] Created warnings vs. errors distinction (vendor terms allowed, non-vendor fail)
+- [x] Added comprehensive console output and JSON reporting
+- [x] All quality gates maintained with intelligent policy awareness
 
-### 2. CI & Protections Setup ⚡ IMMEDIATE
+### 1.8. [x] Vendor Appendix Integration ⚡ COMPLETE
+- [x] Created core/90-appendix-vendors.md header with clear policy note
+- [x] Updated build.manifest.json with 5 Claude-specific blueprints
+- [x] Applied vendor-specific front-matter annotations across 8 files
+- [x] Verified deterministic builds with new baseline (8d4125c5)
+- [x] Expanded output from 4.6KB to 291KB (24x growth)
+- [x] Maintained vendor-neutral core with clear vendor content separation
+
+### 1.9. [x] Documentation Updates ⚡ COMPLETE
+- [x] Updated STATUS.md to reflect hybrid architecture and current scale
+- [x] Updated TASKS.md with completed items and current priorities
+- [x] Updated README.md to explain hybrid approach and policy-aware features
+- [x] Added vendor appendix decision to DECISIONS.md with comprehensive impact analysis
+- [x] Updated version history to v1.2.0 reflecting hybrid architecture
+- [x] All documentation now consistent with current system capabilities
+
+### 2. Claude Code Automation Validation 🎯 HIGH
+- [ ] Test standard execution pattern with timeout management
+- [ ] Verify authentication status and tool permissions
+- [ ] Validate JSON output parsing for programmatic use
+- [ ] Test background execution with progress monitoring
+- [ ] Document any execution failures or timeout issues
+
+### 3. CI & Protections Setup 🎯 IMMEDIATE
 - [ ] Create GitHub Actions workflow (.github/workflows/ci.yml)
 - [ ] Add workflow steps: make docsyn, verify_baseline.py, qa_build.py
 - [ ] Create CODEOWNERS file to protect curated paths
 - [ ] Enable branch protection on main (require PR + green checks)
 - [ ] Test workflow with a small PR
 
-### 3. Claude Code Automation Validation 🎯 HIGH  
+### 4. Agent Blueprint Testing & Validation 🎯 HIGH  
 **Status:** Ready - All blueprints documented, need operational testing
 
 **Blueprints to Test:**
@@ -58,19 +80,19 @@
 - [ ] Adaptive Learning - Test feedback loop and configuration updates
 - [ ] Multi-Agent Orchestrator - Test parallel execution and handoff patterns
 
-### 4. Router System Enhancement 📝 HIGH
+### 5. Router System Enhancement 📝 HIGH
 - [ ] Validate query-pattern matching for all 7 intent types
 - [ ] Test negative pattern filtering effectiveness
 - [ ] Add performance metrics for routing accuracy
 - [ ] Document routing decision logic and edge cases
 
-### 5. Risk & Control Validation 🎯 MEDIUM
+### 6. Risk & Control Validation 🎯 MEDIUM
 - [ ] Test all documented mitigations for each risk pillar
 - [ ] Validate HITL checkpoints in destructive operations
 - [ ] Test circuit breakers and timeout mechanisms
 - [ ] Audit logging implementation across all agents
 
-### 6. Development Environment Setup 📝 MEDIUM
+### 7. Development Environment Setup 📝 MEDIUM
 - [ ] Test devcontainer configuration for reproducibility
 - [ ] Validate least-privilege security model
 - [ ] Test ~/.claude_agents configuration versioning

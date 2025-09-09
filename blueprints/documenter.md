@@ -1,3 +1,12 @@
+---
+source: "DocSyn Framework"
+retrieved: 2025-09-09
+owner: "development-team"
+tags: [documenter, automation, agent-blueprint]
+blueprint: documenter
+anchor: true
+---
+
 # Documenter
 
 ## Objective

@@ -24,6 +24,22 @@
 **Result:** ✅ Rename completed successfully, all scripts updated, CI pipeline tested and functional, old SSOT.md removed cleanly  
 **Impact:** Clearer intent for agents and consumers – file purpose is now obvious, reduces misinterpretation, maintains all functionality while improving clarity
 
+## Policy-Aware QA System for Vendor-Specific Content
+**Date:** 2025-09-09  
+**Status:** Active - Production Ready  
+**Problem:** DocSyn had strict vendor-neutral policy with forbidden terms ("Claude Code", "Claude AI") that blocked valuable vendor-specific documentation from being curated. System needed ability to include Claude-specific implementation examples while maintaining vendor-neutral core architecture  
+**Decision:** Implemented hybrid approach with policy-aware QA validation. Modified scripts/qa_build.py to classify files as vendor-specific via front-matter (`policy: vendor-specific` and `tags: [vendor, claude]`) or path-based rules (`blueprints/vendor/`). Added anchor exemption for small blueprint files (`anchor: true`). Core remains vendor-neutral, vendor docs allowed under explicit policy  
+**Result:** ✅ Successfully implemented with 8 Claude-specific files properly annotated, 7 anchor files exempt from size rules, QA system distinguishes between forbidden problems (fail build) and vendor-specific warnings (allowed), full CI pipeline passing with deterministic builds  
+**Impact:** Enables curation of valuable vendor-specific patterns while preserving architectural neutrality, provides clear policy framework for future vendor content, maintains quality gates and build reliability, demonstrates transferable patterns across AI platforms
+
+## Vendor Appendix Integration for Hybrid Content Architecture
+**Date:** 2025-09-09  
+**Status:** Active - Production Ready  
+**Problem:** After implementing policy-aware QA, needed clean method to include valuable Claude-specific documentation (5 files, ~265KB) in compiled output while maintaining clear separation from vendor-neutral core architecture. Required solution that preserves deterministic builds and quality gates  
+**Decision:** Implemented minimal vendor appendix approach. Created core/90-appendix-vendors.md header with explicit policy note. Updated build.manifest.json to include 5 Claude-specific blueprints after appendix header. Maintained alphabetical sorting for determinism. All vendor files properly annotated with front-matter classification  
+**Result:** ✅ Successfully expanded from 4.6KB to 291KB (24x growth) while maintaining architectural integrity. New baseline hash 8d4125c5 established. Hybrid structure: vendor-neutral core + clearly marked vendor appendix. All QA gates passing with vendor-aware validation  
+**Impact:** Demonstrates successful hybrid architecture allowing both universal patterns and concrete vendor examples. Provides framework for any future vendor content while preserving neutrality of core sections. Maintains quality, determinism, and clear policy boundaries
+
 ## CLI Workflow Simplification Decision  
 **Date:** 2025-09-09  
 **Status:** Active - Production Ready  

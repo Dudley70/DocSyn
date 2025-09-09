@@ -1,11 +1,14 @@
 # DocSyn - Document Synthesiser
 
-**DocSyn** is a document synthesis system that processes multiple source documents and compiles them into a single, de-duplicated knowledge base. It prevents "Global Leakage" by identifying and removing duplicate sections across different modules.
+**DocSyn** is a hybrid document synthesis system that compiles vendor-neutral core patterns with vendor-specific implementation examples into a single, policy-aware knowledge base. It supports both universal architectural patterns and concrete vendor implementations while maintaining strict quality controls.
 
-**Universal System:** Works with any document set - academic papers, API docs, legal documents, technical specifications, or any collection of related documents.
+**Hybrid Architecture:** Vendor-neutral core + vendor-specific appendix with policy-aware validation
 
 ```
-sources → staging → promotion → build → DocSyn_Compiled.md
+sources → staging → promotion → policy-aware build → DocSyn_Compiled.md
+                                        │
+                                        ├── Core (Universal Patterns)
+                                        └── Appendix (Vendor Examples)
 ```
 
 ## Quick Start
@@ -92,27 +95,48 @@ DocSyn/
 
 ## Quality Assurance
 
-DocSyn v1.1.0+ includes comprehensive quality gates:
+DocSyn v1.1.0+ includes comprehensive policy-aware quality gates:
 
+- **Policy-Aware Validation**: Intelligent classification of vendor-specific vs. vendor-neutral content
+- **Hybrid Content Support**: Vendor terms allowed in marked vendor files, forbidden in neutral core
 - **Structural Integrity**: Ensures automation infrastructure is intact
-- **Forbidden Terms**: Prevents contamination from previous document batches
+- **Anchor File Support**: Small blueprint files exempt from size requirements via `anchor: true`
 - **Router Contract**: Validates route codes and blueprint mappings
-- **Baseline Verification**: `make verify` ensures consistent output
+- **Baseline Verification**: `make verify` ensures consistent output (current: 8d4125c5)
 - **Deterministic Assembly**: Identical inputs always produce identical output
 - **Unicode Support**: Proper handling of international characters
 - **Cross-Platform**: Consistent behavior across operating systems
 
+### Policy Classification
+
+Files are classified via front-matter:
+
+```yaml
+# Vendor-specific content (allows vendor terms)
+policy: vendor-specific
+tags: [vendor, claude]
+
+# Anchor files (exempt from size requirements)  
+anchor: true
+
+# Neutral content (default, enforces vendor-neutral policy)
+# No special annotations needed
+```
+
 ## Key Features
 
-- **Universal Document Processing**: Works with any document set or domain
-- **Deterministic Builds**: Same input always produces same output hash
+- **Hybrid Architecture**: Vendor-neutral core + vendor-specific appendix with clear separation
+- **Policy-Aware QA**: Intelligent content classification and validation
+- **Deterministic Builds**: Same input always produces same output hash (current: 8d4125c5)
 - **Global Deduplication**: Prevents duplicate sections across modules
 - **Multiple Input Methods**: Direct staging or bulk source processing
-- **Quality Gates**: Comprehensive QA with structural integrity checks
+- **Quality Gates**: Comprehensive QA with policy-aware validation
 - **Staging Management**: Automatic cleanup of processed files
 - **Template System**: Reusable blueprint structure for any content type
 - **Unicode Support**: Proper handling of international characters
 - **Cross-Platform**: Consistent behavior across operating systems
+- **Vendor Content Support**: Framework for including vendor examples while preserving neutrality
+- **Anchor File System**: Small blueprint files with size requirement exemptions
 
 ## For New Document Batches
 
@@ -137,7 +161,7 @@ make docsyn
 
 ## Baseline Management
 
-The system maintains a quality baseline:
+The system maintains a quality baseline with deterministic builds:
 
 ```bash
 # Set new baseline (after content changes)
@@ -146,7 +170,22 @@ shasum -a 256 dist/DocSyn_Compiled.md | awk '{print $1}' > tests/BASELINE_SHA256
 
 # Verify against baseline
 make verify
+
+# Current baseline: 8d4125c5 (291KB, 4,941 lines)
 ```
+
+## Current System Scale
+
+**Output Statistics:**
+- **Size**: 291KB (4,941 lines)
+- **Sources**: 16 curated files (3 core + 13 blueprints)
+- **Architecture**: Hybrid vendor-neutral + vendor-specific
+- **Hash**: 8d4125c5 (deterministic baseline)
+
+**Content Breakdown:**
+- **Core (Vendor-Neutral)**: ~26KB - Universal agent patterns and development environment
+- **Appendix (Vendor-Specific)**: ~265KB - Claude implementation examples and detailed guides
+- **Quality Gates**: 8 policy checks passing with vendor-aware validation
 
 ## Requirements
 
@@ -156,5 +195,6 @@ make verify
 
 ## Version History
 
-**v1.1.0** - Deterministic builds, verification gates, comprehensive testing
+**v1.2.0** - Hybrid architecture, policy-aware QA, vendor appendix integration  
+**v1.1.0** - Deterministic builds, verification gates, comprehensive testing  
 **v1.0.0** - Initial release

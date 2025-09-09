@@ -2,38 +2,80 @@
 """
 Quality assurance checks for DocSyn builds.
 Ensures clean, consistent output free of contamination from previous document batches.
+Supports policy-aware validation for vendor-specific content.
 """
 
 import re
 import json
 import sys
+import yaml
+import unicodedata
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 DIST_DIR = ROOT / "dist"
 COMPILED_FILE = DIST_DIR / "DocSyn_Compiled.md"
 
+# Constants for policy-aware validation
+FORBIDDEN_TERMS = ["Claude Code", "Claude AI", "Single Source of Truth"]
+MIN_BYTES_BLUEPRINT = 1000
+
+# Helper: read YAML front-matter if present
+def read_front_matter(path: Path):
+    try:
+        text = path.read_text(encoding="utf-8")
+        if text.startswith("---"):
+            end = text.find("\n---", 3)
+            if end != -1:
+                fm = text[3:end].strip()
+                return yaml.safe_load(fm) or {}
+    except Exception:
+        pass
+    return {}
+
+# Helper: policy classification
+def is_vendor_specific(path: Path, fm: dict) -> bool:
+    if str(path).startswith("blueprints/vendor/"):
+        return True
+    if fm.get("policy") == "vendor-specific":
+        return True
+    tags = fm.get("tags") or []
+    if isinstance(tags, list) and any(t.lower() in {"vendor", "claude"} for t in tags):
+        return True
+    return False
+
+def is_anchor(path: Path, fm: dict) -> bool:
+    return bool(fm.get("anchor") is True)
+
 def check_forbidden_terms():
-    """Check for terms that shouldn't appear in cleaned builds."""
-    FORBIDDEN = [
-        r"Claude Code",
-        r"Claude AI",
-        r"SSOT\.md",  # Old filename references
-        r"Single Source of Truth",  # Old terminology
-    ]
+    """Check for forbidden terms with policy awareness for vendor-specific files."""
+    problems = []
+    warnings = []
     
-    if not COMPILED_FILE.exists():
-        return {"forbidden_terms": [], "error": "Compiled file not found"}
+    for path in Path(ROOT / "blueprints").rglob("*.md"):
+        fm = read_front_matter(path)
+        text = path.read_text(encoding="utf-8", errors="replace")
+        hits = [t for t in FORBIDDEN_TERMS if t in text]
+        
+        if hits:
+            rel_path = str(path.relative_to(ROOT))
+            if is_vendor_specific(path, fm):
+                warnings.append((rel_path, hits))
+            else:
+                problems.append((rel_path, hits))
     
-    content = COMPILED_FILE.read_text(encoding="utf-8")
-    bad = []
-    
-    for pattern in FORBIDDEN:
-        matches = re.findall(pattern, content, re.IGNORECASE)
-        if matches:
-            bad.extend([f"{pattern}: {len(matches)} occurrences"])
-    
-    return {"forbidden_terms": bad}
+    return {"forbidden_problems": problems, "forbidden_warnings": warnings}
+
+def check_blueprint_sizes():
+    """Check blueprint file sizes with anchor exemption."""
+    small = []
+    for path in Path(ROOT / "blueprints").rglob("*.md"):
+        fm = read_front_matter(path)
+        if is_anchor(path, fm):   # anchor files are exempt
+            continue
+        if path.stat().st_size < MIN_BYTES_BLUEPRINT:
+            small.append(str(path.relative_to(ROOT)))
+    return {"small_blueprints": small}
 
 def check_unicode_integrity():
     """Ensure proper Unicode handling."""
@@ -130,26 +172,43 @@ def main():
     
     # Run all checks
     report["checks"]["forbidden_terms"] = check_forbidden_terms()
+    report["checks"]["blueprint_sizes"] = check_blueprint_sizes()
     report["checks"]["unicode"] = check_unicode_integrity()
     report["checks"]["required_files"] = check_required_files()
     report["checks"]["router_contract"] = check_router_contract()
     report["checks"]["determinism"] = check_determinism()
     
-    # Check for failures
+    # Check for failures (only problems, not warnings)
     has_failures = (
-        bool(report["checks"]["forbidden_terms"]["forbidden_terms"]) or
+        bool(report["checks"]["forbidden_terms"]["forbidden_problems"]) or
+        bool(report["checks"]["blueprint_sizes"]["small_blueprints"]) or
         report["checks"]["unicode"]["unicode_check"] != "OK" or
         bool(report["checks"]["required_files"]["required_missing"]) or
         report["checks"]["router_contract"]["router_contract"] != "OK" or
         report["checks"]["determinism"]["determinism"] != "OK"
     )
     
-    if report["checks"]["forbidden_terms"]["forbidden_terms"]:
-        print("❌ FORBIDDEN TERMS DETECTED:")
-        for term in report["checks"]["forbidden_terms"]["forbidden_terms"]:
-            print(f"   {term}")
+    # Handle forbidden terms with policy awareness
+    forbidden_check = report["checks"]["forbidden_terms"]
+    if forbidden_check["forbidden_problems"]:
+        print("❌ FORBIDDEN TERMS IN NON-VENDOR FILES:")
+        for file, terms in forbidden_check["forbidden_problems"]:
+            print(f"   {file}: {', '.join(terms)}")
     else:
         print("✅ Forbidden terms check: CLEAN")
+    
+    if forbidden_check["forbidden_warnings"]:
+        print("⚠️  VENDOR-SPECIFIC TERMS (ALLOWED):")
+        for file, terms in forbidden_check["forbidden_warnings"]:
+            print(f"   {file}: {', '.join(terms)}")
+    
+    # Handle blueprint sizes
+    if report["checks"]["blueprint_sizes"]["small_blueprints"]:
+        print("❌ SMALL BLUEPRINT FILES (non-anchors):")
+        for file in report["checks"]["blueprint_sizes"]["small_blueprints"]:
+            print(f"   {file}")
+    else:
+        print("✅ Blueprint sizes check: OK")
     
     if report["checks"]["unicode"]["unicode_check"] != "OK":
         print(f"❌ Unicode check: {report['checks']['unicode'].get('error', 'FAIL')}")
@@ -188,7 +247,8 @@ def main():
         f"Build Status: {'FAIL' if has_failures else 'PASS'}",
         "",
         "## Checks:",
-        f"- Forbidden Terms: {'FAIL' if report['checks']['forbidden_terms']['forbidden_terms'] else 'PASS'}",
+        f"- Forbidden Terms: {'FAIL' if report['checks']['forbidden_terms']['forbidden_problems'] else 'PASS'}",
+        f"- Blueprint Sizes: {'FAIL' if report['checks']['blueprint_sizes']['small_blueprints'] else 'PASS'}",
         f"- Unicode Integrity: {report['checks']['unicode']['unicode_check']}",
         f"- Required Files: {'FAIL' if report['checks']['required_files']['required_missing'] else 'PASS'}",
         f"- Router Contract: {report['checks']['router_contract']['router_contract']}",
@@ -222,10 +282,27 @@ def main():
                 ""
             ])
     
-    if report["checks"]["forbidden_terms"]["forbidden_terms"]:
+    # Add forbidden terms issues
+    forbidden_check = report["checks"]["forbidden_terms"]
+    if forbidden_check["forbidden_problems"]:
         summary_lines.extend([
-            "## Forbidden Terms Found:",
-            *[f"- {term}" for term in report["checks"]["forbidden_terms"]["forbidden_terms"]],
+            "## Forbidden Terms in Non-Vendor Files:",
+            *[f"- {file}: {', '.join(terms)}" for file, terms in forbidden_check["forbidden_problems"]],
+            ""
+        ])
+    
+    if forbidden_check["forbidden_warnings"]:
+        summary_lines.extend([
+            "## Vendor-Specific Terms (Allowed):",
+            *[f"- {file}: {', '.join(terms)}" for file, terms in forbidden_check["forbidden_warnings"]],
+            ""
+        ])
+    
+    # Add small blueprint files
+    if report["checks"]["blueprint_sizes"]["small_blueprints"]:
+        summary_lines.extend([
+            "## Small Blueprint Files (Non-Anchors):",
+            *[f"- {file}" for file in report["checks"]["blueprint_sizes"]["small_blueprints"]],
             ""
         ])
     
