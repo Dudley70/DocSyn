@@ -1,25 +1,30 @@
 # DocSyn Project Status
 
 ## Current System State
-**Phase:** Document Synthesis System - Ready for Next Batch  
+**Phase:** Production-Ready Hybrid Documentation System  
 **Key Components:** 
-- Document Synthesiser: Takes multiple documents (any topic) as input
-- Processing scripts: Convert raw sources → curated sections → single compiled output
-- System ready for next document batch processing
-- Output: dist/DocSyn_Compiled.md for integration
+- Document Synthesiser: Vendor-neutral core + vendor-specific appendix architecture
+- Policy-aware QA: Intelligent handling of vendor-specific vs. neutral content
+- Processing scripts: Raw sources → staged promotion → curated compilation → single output
+- Output: dist/DocSyn_Compiled.md (4,941 lines, 291KB) with comprehensive agent documentation
 
 **Last Validated:** 2025-09-09  
-**Status:** Working - Comprehensive documentation system with auto-consolidation
+**Status:** Working - Comprehensive hybrid system with successful vendor content integration
 
 ## Next Action
-**IMMEDIATE:** Ready for next document batch  
+**IMMEDIATE:** Claude Code automation validation  
 **PRIORITY:** High  
-**ESTIMATED TIME:** Ready to process new documents
+**ESTIMATED TIME:** 1 hour
 
 **COMPLETED:** 
-- Staging cleaner integration - System now self-healing for duplicate files
-- Output file rename - Legacy → DocSyn_Compiled.md for clarity
-- Claude Code batch processing and system cleanup
+- ✅ Staging cleaner integration - System now self-healing for duplicate files
+- ✅ Output file rename - Legacy → DocSyn_Compiled.md for clarity
+- ✅ Claude Code batch processing and system cleanup
+- ✅ Policy-aware QA system - Vendor-specific content properly handled
+- ✅ Hybrid approach implementation - Core vendor-neutral, vendor docs allowed under policy
+- ✅ Vendor appendix integration - 5 Claude-specific blueprints (265KB) added with clear separation
+- ✅ Quality gates maintained - All validation passing with deterministic builds
+- ✅ Documentation updates - All files updated to reflect v1.2.0 hybrid architecture
 
 ## Recovery Information
 **Environment:** Document synthesis system  
@@ -32,17 +37,22 @@
 
 **Configuration:** 
 - Three-file documentation system (STATUS.md, TASKS.md, DECISIONS.md)
+- Policy-aware QA with vendor-specific content classification
+- Hybrid build manifest: 16 curated sources (3 core + 13 blueprints)
 - Makefile targets for build automation
-- Baseline verification system
-- Deterministic build process
+- Baseline verification system (hash: 8d4125c5)
+- Deterministic build process with vendor content support
 
 **Restart Commands:**
 ```bash
 # Process new document batch
 make docsyn
 
-# Verify deterministic output
+# Verify deterministic output  
 make verify
+
+# Run quality assurance with policy awareness
+make qa
 
 # Check system status
 cat STATUS.md
@@ -50,22 +60,40 @@ cat STATUS.md
 
 ## Essential Files
 **Core Components:**
-- DocSyn_Compiled.md - Auto-generated consolidation of all documentation
-- Build system - Promotion, assembly, and validation pipeline
-- Quality gates - Baseline verification and deterministic builds
+- DocSyn_Compiled.md - Auto-generated consolidation: vendor-neutral core + vendor appendix
+- Policy-aware QA system - Distinguishes vendor-specific (allowed) vs. neutral (enforced) content
+- Build system - Promotion, assembly, and validation pipeline with hybrid content support
+- Quality gates - Baseline verification (8d4125c5) and deterministic builds
 
-**Documentation Structure:**
-- blueprints/ - Curated content modules
-- merge_pr/updated/ - Staging area for new documents
-- reference/ - Technical specifications and templates
-- core/ - Global sections and system components
+**Documentation Architecture:**
+- core/ - Vendor-neutral sections: router, risks, devcontainer, appendix header (4 files)
+- blueprints/ - Universal patterns + vendor examples: 7 neutral + 8 vendor-specific (15 files total)
+- build.manifest.json - 16 curated sources with explicit vendor content inclusion
+- Front-matter classification: `policy: vendor-specific` and `anchor: true` support
+
+**Hybrid Content Structure:**
+```
+Core (Vendor-Neutral):
+├── Router & Risk Framework  
+├── Development Environment
+├── Universal Agent Blueprints (7 anchor files)
+
+Appendix (Vendor-Specific):
+├── Claude Agent Framework (46KB)
+├── Claude AI Coding Guide (63KB)
+├── Claude Code Bible (123KB) 
+├── Code Assistant Patterns (33KB)
+└── Deployment Agent Guide (27KB)
+```
 
 **System Components:**
-1. Document Synthesis - Multi-source compilation and deduplication
-2. Staging Management - File promotion and validation
-3. Build Pipeline - Assembly, verification, and output generation
-4. Quality Gates - Baseline verification and deterministic builds
-5. Cleanup System - Automatic duplicate detection and removal
+1. Document Synthesis - Multi-source compilation with vendor-neutral/vendor-specific separation
+2. Policy-Aware QA - Classification system for vendor vs. neutral content validation  
+3. Staging Management - File promotion and validation with duplicate detection
+4. Build Pipeline - Assembly, verification, and deterministic output generation
+5. Quality Gates - Baseline verification, forbidden terms checking, and architectural integrity
+6. Cleanup System - Automatic duplicate detection and staging area maintenance
+7. Hybrid Content Management - Unified system supporting both universal patterns and vendor examples
 
 ## File System References
 - **Current priorities:** See TASKS.md

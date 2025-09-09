@@ -1,3 +1,12 @@
+---
+source: "DocSyn Framework"
+retrieved: 2025-09-09
+owner: "development-team"
+tags: [guardian, monitoring, agent-blueprint]
+blueprint: guardian
+anchor: true
+---
+
 # Guardian
 
 ## Objective

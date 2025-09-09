@@ -1,3 +1,12 @@
+---
+source: "DocSyn Framework"
+retrieved: 2025-09-09
+owner: "development-team"
+tags: [cicd-analyst, security, agent-blueprint]
+blueprint: cicd-analyst
+anchor: true
+---
+
 # Cicd-Analyst
 
 ## Objective

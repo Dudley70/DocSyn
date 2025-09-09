@@ -1,3 +1,12 @@
+---
+source: "DocSyn Framework"
+retrieved: 2025-09-09
+owner: "development-team"
+tags: [orchestrator, coordination, agent-blueprint]
+blueprint: orchestrator
+anchor: true
+---
+
 # Orchestrator
 
 ## Objective

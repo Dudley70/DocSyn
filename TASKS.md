@@ -1,9 +1,9 @@
 # DocSyn Project Tasks & Priorities
 
-## Current Priority: Claude Code Automation Validation ⚡
-**Status:** Ready - GitHub setup complete, ready for testing  
+## Current Priority: Claude Code Automation Validation 🎯
+**Status:** Ready - Documentation updated, system in production state  
 **Next Action:** Test standard execution pattern with timeout management  
-**Why:** Validate automation workflows before deployment  
+**Why:** Validate automation workflows with comprehensive agent documentation system  
 **Time:** 1 hour
 
 ## Active Work Queue
@@ -30,7 +30,31 @@
 - [x] Tested full CI pipeline - all functional
 - [x] Removed old SSOT.md file cleanly
 
-### 2. Claude Code Automation Validation ⚡ IMMEDIATE
+### 1.7. [x] Policy-Aware QA System Implementation ⚡ COMPLETE
+- [x] Modified scripts/qa_build.py with vendor-specific content classification
+- [x] Added front-matter parsing and policy evaluation functions  
+- [x] Implemented anchor file exemption from size requirements
+- [x] Created warnings vs. errors distinction (vendor terms allowed, non-vendor fail)
+- [x] Added comprehensive console output and JSON reporting
+- [x] All quality gates maintained with intelligent policy awareness
+
+### 1.8. [x] Vendor Appendix Integration ⚡ COMPLETE
+- [x] Created core/90-appendix-vendors.md header with clear policy note
+- [x] Updated build.manifest.json with 5 Claude-specific blueprints
+- [x] Applied vendor-specific front-matter annotations across 8 files
+- [x] Verified deterministic builds with new baseline (8d4125c5)
+- [x] Expanded output from 4.6KB to 291KB (24x growth)
+- [x] Maintained vendor-neutral core with clear vendor content separation
+
+### 1.9. [x] Documentation Updates ⚡ COMPLETE
+- [x] Updated STATUS.md to reflect hybrid architecture and current scale
+- [x] Updated TASKS.md with completed items and current priorities
+- [x] Updated README.md to explain hybrid approach and policy-aware features
+- [x] Added vendor appendix decision to DECISIONS.md with comprehensive impact analysis
+- [x] Updated version history to v1.2.0 reflecting hybrid architecture
+- [x] All documentation now consistent with current system capabilities
+
+### 2. Claude Code Automation Validation 🎯 HIGH
 - [ ] Test standard execution pattern with timeout management
 - [ ] Verify authentication status and tool permissions
 - [ ] Validate JSON output parsing for programmatic use

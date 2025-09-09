@@ -1,3 +1,12 @@
+---
+source: "DocSyn Framework"
+retrieved: 2025-09-09
+owner: "development-team"
+tags: [tester, validation, agent-blueprint]
+blueprint: tester
+anchor: true
+---
+
 # Tester
 
 ## Objective

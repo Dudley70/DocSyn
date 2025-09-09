@@ -1,3 +1,12 @@
+---
+source: "DocSyn Framework"
+retrieved: 2025-09-09
+owner: "development-team"
+tags: [janitor, cleanup, agent-blueprint]
+blueprint: janitor
+anchor: true
+---
+
 # Janitor
 
 ## Objective
