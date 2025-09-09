@@ -1,17 +1,13 @@
 # 0. Router — Query-Pattern Matrix
 {{#CH0-ROUTER}}
 
-> Legend: **Positive** (must match), **Negative** (must not match). **Route** points to the blueprint section.
+> Documentation synthesis router - Ready for next document batch configuration.
 
 | Intent | Positive Patterns | Negative Patterns | Route | Key Risks |
 |---|---|---|---|---|
-| Generate docs for a repo | docs, document, readme, scan | secrets, payments | CH4-BP-DOC | Data: leakage; Ops: cost |
-| Guard with file watcher | guard, watch, lint | deploy, payments | CH4-BP-GRD | Env: perms; Ops: noise |
-| Clean/format code | janitor, cleanup, dead code | deploy, cdn | CH4-BP-JAN | Ops: destructive ops |
-| Run tests with coverage | test, unit, integration, coverage | perf test | CH4-BP-TST | Ops: flakiness |
-| CI/CD security analysis | pipeline, secrets, SAST, DAST | perf, load | CH4-BP-CICD | Governance: approvals |
-| Multi-agent orchestration | orchestrate, multi-agent, plan | single prompt | CH4-BP-ORCH | Ops: runaway loops |
-| Learn from feedback | adapt, improve, retrospective | delete data | CH4-BP-ADAPT | Governance: consent |
+| Document processing | process, compile, synthesize | delete, remove | DOC-PROCESS | Data: integrity |
+| Content analysis | analyze, review, examine | ignore, skip | DOC-ANALYZE | Data: accuracy |
+| System management | manage, configure, setup | break, destroy | DOC-MANAGE | Ops: availability |
 
 ---
 
@@ -19,3 +15,9 @@
 - **Positive Patterns**: comma-separated keywords/regex the router uses to route queries.
 - **Negative Patterns**: keywords/regex that disqualify a route.
 - **Route**: stable section ID of the target blueprint.
+- **Key Risks**: primary risk categories for this intent.
+
+## Next Steps
+1. Add new document sources to merge_pr/updated/
+2. Run `make docsyn` to process documents
+3. Configure routing patterns based on new document content

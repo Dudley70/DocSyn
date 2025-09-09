@@ -21,7 +21,7 @@ code-lift:
 seed-from-sources:
 	@python3 scripts/seed_from_sources.py
 
-.PHONY: merge-from-sourced merge-apply pr-body ssot check router-test code-lift seed-from-sources clean-staging ci docsyn verify curator-analyze curator-plan curator-apply
+.PHONY: merge-from-sourced merge-apply pr-body ssot check router-test code-lift seed-from-sources clean-staging ci docsyn verify qa curator-analyze curator-plan curator-apply
 
 clean-staging:
 	@python3 scripts/clean_staging_duplicates.py --delete --fail-if-leftovers
@@ -35,10 +35,14 @@ verify: ## Build and assert compiled hash matches baseline
 	@make docsyn >/dev/null
 	@python3 scripts/verify_baseline.py
 
+qa: ## Run quality assurance checks
+	@python3 scripts/qa_build.py
+
 ci: clean-staging
 	@python3 scripts/lift_code_blocks.py check
 	@python3 scripts/assemble_ssot.py
 	@python3 scripts/router_smoke_test.py
+	@python3 scripts/qa_build.py
 
 curator-analyze:
 	@python3 scripts/curator_agent.py analyze
