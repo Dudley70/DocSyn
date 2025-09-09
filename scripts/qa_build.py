@@ -11,7 +11,8 @@ import sys
 try:
     import yaml  # PyYAML
 except ModuleNotFoundError:
-    print("[ERROR] Missing dependency 'pyyaml'. Run: pip install -r requirements.txt")
+    print("[ERROR] Missing dependency: PyYAML. Install with:")
+    print("  pip install -r scripts/requirements.txt")
     raise
 import unicodedata
 from pathlib import Path

@@ -1,0 +1,2 @@
+# DocSyn CI/runtime deps for scripts/*
+PyYAML==6.0.1
