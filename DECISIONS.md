@@ -8,6 +8,46 @@
 **Result:** ✅ Successfully pushed all code and documentation, established version control, enabled collaboration and safe backup  
 **Impact:** Project is now protected against data loss, enables team collaboration, and provides foundation for CI/CD workflows
 
+## Staging Cleaner Integration for Self-Healing Document System
+**Date:** 2025-09-09  
+**Status:** Active - Production Ready  
+**Problem:** Document promotion scripts occasionally run in copy-retention mode instead of move mode, leading to duplicate files accumulating in staging areas, causing confusion for contributors who might re-ingest already-processed files  
+**Decision:** Implemented comprehensive staging cleaner with SHA256 content comparison, integrated into CI pipeline with clean-staging → ci dependency. Features dry-run default, explicit --delete flag, CI integration with --fail-if-leftovers, environment override via DOCSYN_RETAIN_STAGING=1, and comprehensive JSON reporting  
+**Result:** ✅ Script tested successfully, generates dist/CLEAN_STAGING_REPORT.json, integrates with make ci pipeline, prevents duplicate file accumulation automatically  
+**Impact:** System is now self-healing for the exact scenario encountered (promotion script copy-retention mode), prevents staging area drift, maintains staging as true inbox for contributors, enables early detection of promotion issues in CI workflows
+
+## Output File Rename from SSOT.md to DocSyn_Compiled.md
+**Date:** 2025-09-09  
+**Status:** Active - Production Ready  
+**Problem:** Output filename SSOT.md caused confusion for agents and downstream consumers who interpreted it as system configuration rather than compiled knowledge output. Agents would reference "SSOT" thinking it was about system config, not the synthesized documentation  
+**Decision:** Renamed output from dist/SSOT.md to dist/DocSyn_Compiled.md across all scripts and documentation. Updated banner from "Single Source of Truth (SSOT)" to "DocSyn Compiled Knowledge". Changed all file references in assemble_ssot.py, ci_validate.py, one_click_repair_and_build.py, and STATUS.md  
+**Result:** ✅ Rename completed successfully, all scripts updated, CI pipeline tested and functional, old SSOT.md removed cleanly  
+**Impact:** Clearer intent for agents and consumers – file purpose is now obvious, reduces misinterpretation, maintains all functionality while improving clarity
+
+## CLI Workflow Simplification Decision  
+**Date:** 2025-09-09  
+**Status:** Active - Production Ready  
+**Problem:** User explored multiple automation approaches (file watchers, web UIs, hosted solutions) to simplify running `python scripts/promote_updated.py && make ci`. Analysis revealed scope creep toward complex solutions for minimal actual friction  
+**Decision:** Implemented single Makefile target `make docsyn` that wraps existing two-command workflow. Rejected file watchers, web servers, and complex automation in favor of minimal solution matching actual need. Maintains CLI as single source of truth  
+**Result:** ✅ Simple target implemented, reduces 44 characters to 10, zero new complexity or maintenance burden  
+**Impact:** Addresses actual workflow friction without introducing security risks, maintenance overhead, or multiple interfaces. Demonstrates value of matching solution complexity to problem size
+
+## Critical Deterministic Behavior Fix
+**Date:** 2025-09-09  
+**Status:** Active - Production Critical  
+**Problem:** Pre-upgrade testing revealed non-deterministic output behavior. Same inputs produced different file hashes across runs due to microsecond-precision timestamp injection in assembly process. This made incremental vs batch processing produce different results and prevented reproducible builds  
+**Decision:** Removed timestamp from output banner in assemble_ssot.py. Build metadata now tracked in separate BUILD_REPORT.txt rather than injected into compiled content. Maintains build traceability without compromising deterministic behavior  
+**Result:** ✅ Deterministic behavior restored, identical inputs now produce identical outputs (hash: 5bdf1030...), incremental and batch processing now equivalent  
+**Impact:** Critical for production reliability - enables reproducible builds, consistent CI/CD behavior, and trustworthy document synthesis. Essential foundation for version control and change tracking
+
+## Pre-Release Hardening for v1.1.0
+**Date:** 2025-09-09  
+**Status:** Active - Production Ready  
+**Problem:** Before version upgrade, needed to validate file handling behavior, cross-platform consistency, and edge case handling. Testing revealed minor Unicode preservation issues and potential input ordering non-determinism  
+**Decision:** Implemented explicit input sorting in assembly process, added Unicode NFC normalization for cross-platform consistency, added .gitattributes for line ending standardization. Created comprehensive test suite and baseline verification system  
+**Result:** ✅ All hardening tests pass, baseline verification system operational (make verify), Unicode handling improved, deterministic behavior locked across platforms  
+**Impact:** Production-ready release with comprehensive quality gates, baseline hash verification prevents regressions, cross-platform behavior standardized
+
 ---
 
 ## Decision Template
@@ -63,4 +103,4 @@ Use this format for all decisions:
 - Reference from other files when relevant
 
 ---
-*Last updated: [YYYY-MM-DD]*
+*Last updated: 2025-09-09*

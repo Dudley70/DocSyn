@@ -14,6 +14,22 @@
 - [x] Successfully pushed all code and documentation
 - [x] Project is now safely backed up and version controlled
 
+### 1.5. [x] Staging Cleaner Integration ⚡ COMPLETE
+- [x] Created scripts/clean_staging_duplicates.py with SHA256 content comparison
+- [x] Added CLEAN_STAGING.md documentation
+- [x] Integrated clean-staging target into Makefile CI pipeline
+- [x] Fixed encoding issues and Makefile formatting
+- [x] Tested functionality - generates dist/CLEAN_STAGING_REPORT.json
+- [x] System now self-healing for duplicate file accumulation
+
+### 1.6. [x] Output File Rename ⚡ COMPLETE
+- [x] Renamed dist/SSOT.md to dist/DocSyn_Compiled.md across all scripts
+- [x] Updated banner from "Single Source of Truth" to "DocSyn Compiled Knowledge"
+- [x] Updated assemble_ssot.py, ci_validate.py, one_click_repair_and_build.py
+- [x] Updated STATUS.md references
+- [x] Tested full CI pipeline - all functional
+- [x] Removed old SSOT.md file cleanly
+
 ### 2. Claude Code Automation Validation ⚡ IMMEDIATE
 - [ ] Test standard execution pattern with timeout management
 - [ ] Verify authentication status and tool permissions
@@ -21,7 +37,7 @@
 - [ ] Test background execution with progress monitoring
 - [ ] Document any execution failures or timeout issues
 
-### 2. Agent Blueprint Testing & Validation 🎯 HIGH  
+### 3. Agent Blueprint Testing & Validation 🎯 HIGH  
 **Status:** Ready - All blueprints documented, need operational testing
 
 **Blueprints to Test:**
@@ -33,19 +49,19 @@
 - [ ] Adaptive Learning - Test feedback loop and configuration updates
 - [ ] Multi-Agent Orchestrator - Test parallel execution and handoff patterns
 
-### 3. Router System Enhancement 📝 HIGH
+### 4. Router System Enhancement 📝 HIGH
 - [ ] Validate query-pattern matching for all 7 intent types
 - [ ] Test negative pattern filtering effectiveness
 - [ ] Add performance metrics for routing accuracy
 - [ ] Document routing decision logic and edge cases
 
-### 4. Risk & Control Validation 🎯 MEDIUM
+### 5. Risk & Control Validation 🎯 MEDIUM
 - [ ] Test all documented mitigations for each risk pillar
 - [ ] Validate HITL checkpoints in destructive operations
 - [ ] Test circuit breakers and timeout mechanisms
 - [ ] Audit logging implementation across all agents
 
-### 5. Development Environment Setup 📝 MEDIUM
+### 6. Development Environment Setup 📝 MEDIUM
 - [ ] Test devcontainer configuration for reproducibility
 - [ ] Validate least-privilege security model
 - [ ] Test ~/.claude_agents configuration versioning

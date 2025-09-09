@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import argparse, json, re, sys
+import argparse, json, re, sys, unicodedata
 from pathlib import Path
 from datetime import datetime
 
@@ -42,11 +42,15 @@ def main():
         print("ERROR: No sources configured. Expected 'curated_sources' (preferred) or 'sections' (legacy).", file=sys.stderr)
         sys.exit(3)
 
+    # Sort sources for deterministic ordering
+    sources = sorted(sources)
+
     # Partition sources
     def is_core(p): return "/core/" in p or p.startswith("core/")
     def is_bp(p):   return "/blueprints/" in p or p.startswith("blueprints/")
-    core_paths = [root / p for p in sources if is_core(p)]
-    bp_paths   = [root / p for p in sources if is_bp(p)]
+    # Sort paths for deterministic ordering
+    core_paths = sorted([root / p for p in sources if is_core(p)])
+    bp_paths = sorted([root / p for p in sources if is_bp(p)])
 
     # Build strings
     partA = "\n\n".join(read_text(p) for p in core_paths if p.exists())
@@ -56,7 +60,7 @@ def main():
         print("ERROR: Sources resolved but files are empty/missing. Check paths in manifest.", file=sys.stderr)
         sys.exit(4)
 
-    banner = f"# Single Source of Truth (SSOT)\n\n> Build: {datetime.utcnow().isoformat()}Z\n\n"
+    banner = f"# DocSyn Compiled Knowledge\n\n"
     ssot = normalize(banner + partA + "\n---\n\n" + partB)
 
     # Deduplicate consecutive identical H1s
@@ -70,17 +74,20 @@ def main():
             prev_h = h
         out_lines.append(ln)
     ssot = "\n".join(out_lines) + "\n"
+    
+    # Normalize Unicode for cross-platform consistency
+    ssot = unicodedata.normalize("NFC", ssot)
 
     outdir = root / args.out
     outdir.mkdir(parents=True, exist_ok=True)
 
     (outdir / "PartA_Core.md").write_text(partA, encoding="utf-8")
     (outdir / "PartB_Blueprints.md").write_text(partB, encoding="utf-8")
-    (outdir / "SSOT.md").write_text(ssot, encoding="utf-8")
+    (outdir / "DocSyn_Compiled.md").write_text(ssot, encoding="utf-8")
 
     fence_count = ssot.count("```")
     unique_counts = {g: len(re.findall(rf"^#.*{re.escape(g)}", ssot, flags=re.M|re.I)) for g in GLOBAL_UNIQUE}
-    report = f"""Built {outdir / 'SSOT.md'}
+    report = f"""Built {outdir / 'DocSyn_Compiled.md'}
 - code fences: {fence_count} ({'even' if fence_count % 2 == 0 else 'ODD'})
 - globals in SSOT: {unique_counts}
 """

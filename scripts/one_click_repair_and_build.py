@@ -66,7 +66,7 @@ def assemble(curated):
     ssot = '\n'.join(out_lines) + '\n'
     write(DIST / 'PartA_Core.md', partA)
     write(DIST / 'PartB_Blueprints.md', partB)
-    write(DIST / 'SSOT.md', ssot)
+    write(DIST / 'DocSyn_Compiled.md', ssot)
     return ssot, partB
 
 def main():
@@ -115,7 +115,7 @@ def main():
         'dedup_headings': True,
         'block_recursive_inputs': True
     })
-    manifest.setdefault('outputs', ['dist/SSOT.md', 'dist/PartA_Core.md', 'dist/PartB_Blueprints.md'])
+    manifest.setdefault('outputs', ['dist/DocSyn_Compiled.md', 'dist/PartA_Core.md', 'dist/PartB_Blueprints.md'])
     write(mf, json.dumps(manifest, indent=2))
 
     # 3) Assemble

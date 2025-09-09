@@ -4,7 +4,7 @@ from pathlib import Path
 
 PROJ = Path(__file__).resolve().parents[1]
 DIST = PROJ / "dist"
-SSOT = DIST / "SSOT.md"
+SSOT = DIST / "DocSyn_Compiled.md"
 VAL  = DIST / "VALIDATION.json"
 BPS  = PROJ / "blueprints"
 UPD  = PROJ / "merge_pr" / "updated"
@@ -51,7 +51,7 @@ def extract_blocks(partA: str):
 
 def main():
     if not SSOT.exists():
-        die("dist/SSOT.md not found")
+        die("dist/DocSyn_Compiled.md not found")
     text = SSOT.read_text(encoding="utf-8")
     if len(text.encode("utf-8")) < 100_000:
         die(f"SSOT too small: {len(text.encode('utf-8'))} bytes (<100k).")

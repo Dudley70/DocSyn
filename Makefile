@@ -21,16 +21,30 @@ code-lift:
 seed-from-sources:
 	@python3 scripts/seed_from_sources.py
 
-ci:
+.PHONY: merge-from-sourced merge-apply pr-body ssot check router-test code-lift seed-from-sources clean-staging ci docsyn verify curator-analyze curator-plan curator-apply
+
+clean-staging:
+	@python3 scripts/clean_staging_duplicates.py --delete --fail-if-leftovers
+
+docsyn: ## Promote staged files and build/validate (source of truth)
+	@python3 scripts/promote_updated.py
+	@make ci
+
+verify: ## Build and assert compiled hash matches baseline
+	@rm -rf dist/
+	@make docsyn >/dev/null
+	@python3 scripts/verify_baseline.py
+
+ci: clean-staging
 	@python3 scripts/lift_code_blocks.py check
 	@python3 scripts/assemble_ssot.py
 	@python3 scripts/router_smoke_test.py
 
+curator-analyze:
+	@python3 scripts/curator_agent.py analyze
 
-    .PHONY: curator-analyze curator-plan curator-apply
-    curator-analyze:
-	python scripts/curator_agent.py analyze
-    curator-plan:
-	python scripts/curator_agent.py plan
-    curator-apply:
-	python scripts/curator_agent.py apply
+curator-plan:
+	@python3 scripts/curator_agent.py plan
+
+curator-apply:
+	@python3 scripts/curator_agent.py apply

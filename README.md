@@ -1,77 +1,115 @@
-# SSOT-5: Claude Code Knowledge Base for Gemini Gem
+# DocSyn - Document Synthesiser
 
-**SSOT-5** is a **dual-surface, single-source** knowledge system for Claude Code. Small modular docs (the source) are compiled into one authoritative manual `SSOT.md` (the surface) used by a Gemini Gem to deliver expert guidance on setup, safe use, and agent blueprints.
+**DocSyn** is a document synthesis system that processes multiple source documents and compiles them into a single, de-duplicated knowledge base. It prevents "Global Leakage" by identifying and removing duplicate sections across different modules.
 
 ```
-/core + /blueprints  →  build  →  SSOT.md  →  Gemini Gem  →  Expert Claude Code answers
+sources → staging → promotion → build → DocSyn_Compiled.md
 ```
 
-### What’s in here
-- **`/core/`** — Router (intent → section), Unified Risk Model, Devcontainer setup  
-- **`/blueprints/`** — Normalized agent datasheets (Documenter, Guardian, Janitor, Tester, CI/CD Analyst, Adaptive, Orchestrator)  
-- **`/dashboards/`** — Grafana JSON stubs for KPIs & logs (Prom + Loki)  
-- **`/scripts/`** — Build + validation (assembler, router smoke test, code-lift)  
-- **`SSOT.md`** — Compiled manual (auto-generated; **do not edit directly**)
+## Quick Start
 
----
-
-## Quickstart (≤5 minutes)
-
-**Prereqs:** `make`, `python3`.
+**Prerequisites:** `make`, `python3`
 
 ```bash
 git clone <repository-url>
-cd ssot-5
-make ci                 # builds SSOT, runs router smoke test, checks long code blocks
+cd DocSyn
+make docsyn                 # Complete pipeline: promote + build + validate
 ```
 
-> **Heads-up:** Don’t edit `SSOT.md` directly — it’s compiled. Edit the small files in `core/` and `blueprints/`, then `make ssot`.
+**Output:** `dist/DocSyn_Compiled.md` - The compiled knowledge base
 
----
-
-## Original Sources (Seeding)
-
-Place your raw manuals in `sources/raw/` and run:
+## Simple Workflow
 
 ```bash
-make seed-from-sources
-make ssot
+# Add files to staging
+cp your-docs.md merge_pr/updated/
+
+# Run complete pipeline
+make docsyn
+
+# Verify output matches baseline
+make verify
 ```
 
-This creates `core/*.SOURCED.md` (for comparison) and appends provenance excerpts to relevant blueprints.
-Review diffs, incorporate what you want into the curated chapters, then open a PR.
-
----
-
-## Make commands
+## Core Commands
 
 ```bash
-make ssot          # Compile sources → SSOT.md
-make check         # Basic validation (warnings)
-make router-test   # Router smoke tests
-make code-lift     # Move long code blocks to /reference and link them
-make seed-from-sources  # Heuristically seed curated files from sources/raw
-make merge-from-sourced # Dry-run: structured merge proposal (writes merge_pr/)
-make merge-apply   # Apply proposed merges (use in a feature branch → PR)
-make pr-body       # Generate PR body text from merge_pr/report.json
-make ci            # CI bundle: code-lift check + assemble + router-test
+make docsyn        # Complete pipeline (recommended)
+make verify        # Verify output matches baseline hash
+make ci            # CI pipeline with staging cleanup
+make clean-staging # Remove duplicate files from staging
 ```
+
+## Project Structure
+
+```
+DocSyn/
+├── core/                    # Global sections (router, risks, environment)
+├── blueprints/              # Curated content modules
+├── merge_pr/updated/        # Staging area for new files
+├── scripts/                 # Build and validation scripts
+├── dist/                    # Generated outputs
+│   ├── DocSyn_Compiled.md   # Main compiled output
+│   ├── VALIDATION.json      # Build validation report
+│   └── PROMOTION_REPORT.json # File promotion details
+├── tests/                   # Quality baselines
+│   └── BASELINE_SHA256      # Expected output hash
+└── build.manifest.json      # Source file configuration
+```
+
+## File Flow
+
+1. **Staging**: Place files in `merge_pr/updated/`
+2. **Promotion**: Files copied to `blueprints/` or `core/`
+3. **Assembly**: Sources compiled into `dist/DocSyn_Compiled.md`
+4. **Validation**: Structure and content checks
+5. **Cleanup**: Staging cleaner removes duplicates
+
+## Quality Assurance
+
+DocSyn v1.1.0 includes deterministic builds with verification:
+
+- **Baseline Verification**: `make verify` ensures consistent output
+- **Deterministic Assembly**: Identical inputs always produce identical output
+- **Comprehensive Testing**: File handling, Unicode support, cross-platform consistency
+- **Staging Hygiene**: Automatic duplicate detection and removal
+
+## Key Features
+
+- **Deterministic Builds**: Same input always produces same output hash
+- **Global Deduplication**: Prevents duplicate sections across modules
+- **Staging Management**: Automatic cleanup of processed files
+- **Quality Gates**: Baseline verification prevents regressions
+- **Unicode Support**: Proper handling of international characters
+- **Cross-Platform**: Consistent behavior across operating systems
 
 ## Contributing
 
-PRs must keep **stable section IDs** intact and update Router/Risks when semantics change.
+1. Add your content to `merge_pr/updated/`
+2. Run `make docsyn` to process and build
+3. Check `dist/DocSyn_Compiled.md` for results
+4. Verify with `make verify` before committing
 
-## Project structure
+## Baseline Management
 
+The system maintains a quality baseline:
+
+```bash
+# Set new baseline (after content changes)
+make docsyn >/dev/null
+shasum -a 256 dist/DocSyn_Compiled.md | awk '{print $1}' > tests/BASELINE_SHA256
+
+# Verify against baseline
+make verify
 ```
-ssot-5/
-├── core/                    # Router, Risks, Devcontainer
-├── blueprints/              # Agent datasheets (normalized)
-├── dashboards/              # Grafana JSON stubs
-├── reference/               # Lifted code, schemas, examples
-├── scripts/                 # Assembler, router test, code-lift, merge tools
-├── .github/workflows/       # CI (make ci)
-├── build.manifest.json      # Assembly order
-├── SSOT.md                  # Compiled surface (auto-generated)
-└── README.md
-```
+
+## Requirements
+
+- Python 3.x
+- GNU Make
+- UTF-8 terminal encoding
+
+## Version History
+
+**v1.1.0** - Deterministic builds, verification gates, comprehensive testing
+**v1.0.0** - Initial release
