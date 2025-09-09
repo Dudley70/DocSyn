@@ -1,0 +1,53 @@
+name: release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+
+permissions:
+  contents: write  # needed to create the release
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install deps
+        run: pip install -r requirements.txt || true
+
+      - name: Build (deterministic)
+        run: make docsyn
+
+      - name: QA (guardrails)
+        run: |
+          python3 scripts/tools/manifest_guard.py --manifest build.manifest.json --root .
+          make qa
+          python3 scripts/verify_baseline.py
+
+      - name: Collect release assets
+        run: |
+          mkdir -p release_assets
+          cp dist/DocSyn_Compiled.md release_assets/
+          cp -f dist/QA_SUMMARY.txt release_assets/ || true
+          cp -f dist/PROMOTION_REPORT.json release_assets/ || true
+          cp -f dist/CLEAN_STAGING_REPORT.json release_assets/ || true
+          cp -f core/95-curation-index.md release_assets/ || true
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          draft: false
+          prerelease: false
+          files: |
+            release_assets/**
