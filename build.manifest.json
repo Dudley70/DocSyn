@@ -4,6 +4,7 @@
     "core/00-router.md",
     "core/01-risks.md",
     "core/02-devcontainer.md",
+    "core/95-curation-index.md",
     "core/90-appendix-vendors.md",
     "blueprints/adaptive-learning.md",
     "blueprints/cicd-analyst.md",
@@ -19,7 +20,7 @@
     "blueprints/tester.md"
   ],
   "outputs": [
-    "dist/SSOT.md",
+    "dist/DocSyn_Compiled.md",
     "dist/PartA_Core.md",
     "dist/PartB_Blueprints.md"
   ],
