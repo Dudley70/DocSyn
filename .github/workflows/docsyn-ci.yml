@@ -61,7 +61,7 @@ jobs:
         run: pip install -r requirements.txt || true
 
       - name: Manifest guard (fails on broken manifest)
-        run: python3 scripts/manifest_guard.py
+        run: python3 scripts/tools/manifest_guard.py --manifest build.manifest.json --root .
 
       - name: Rebuild to verify determinism (same steps as build)
         run: make docsyn
