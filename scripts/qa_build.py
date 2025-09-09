@@ -8,7 +8,10 @@ Supports policy-aware validation for vendor-specific content.
 import re
 import json
 import sys
-import yaml
+try:
+    import yaml
+except ImportError:
+    yaml = None
 import unicodedata
 from pathlib import Path
 
@@ -22,6 +25,8 @@ MIN_BYTES_BLUEPRINT = 1000
 
 # Helper: read YAML front-matter if present
 def read_front_matter(path: Path):
+    if yaml is None:
+        return {}  # Skip YAML parsing if module not available
     try:
         text = path.read_text(encoding="utf-8")
         if text.startswith("---"):
