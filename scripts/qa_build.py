@@ -49,6 +49,59 @@ def check_unicode_integrity():
     except UnicodeDecodeError as e:
         return {"unicode_check": "FAIL", "error": str(e)}
 
+def check_required_files():
+    """Ensure structural files required for automation are present."""
+    REQUIRED = [
+        "core/00-router.SOURCED.md",
+        "core/00-router.md",
+        "blueprints/documenter.md",
+        "blueprints/guardian.md",
+        "blueprints/janitor.md",
+        "blueprints/tester.md",
+        "blueprints/cicd-analyst.md",
+        "blueprints/orchestrator.md",
+        "blueprints/adaptive-learning.md",
+    ]
+    
+    missing = [p for p in REQUIRED if not (ROOT / p).exists()]
+    return {"required_missing": missing}
+
+def check_router_contract():
+    """Ensure router contains expected route codes and mappings."""
+    expected_routes = {
+        "CH4-BP-DOC": "blueprints/documenter.md",
+        "CH4-BP-GRD": "blueprints/guardian.md",
+        "CH4-BP-JAN": "blueprints/janitor.md",
+        "CH4-BP-TST": "blueprints/tester.md",
+        "CH4-BP-CICD": "blueprints/cicd-analyst.md",
+        "CH4-BP-ORCH": "blueprints/orchestrator.md",
+        "CH4-BP-ADAPT": "blueprints/adaptive-learning.md",
+    }
+    
+    router_file = ROOT / "core" / "00-router.md"
+    if not router_file.exists():
+        return {"router_contract": "FAIL", "error": "Router file missing"}
+    
+    router = router_file.read_text(encoding="utf-8")
+    missing_codes = []
+    missing_mappings = []
+    
+    for code, target in expected_routes.items():
+        if code not in router:
+            missing_codes.append(code)
+        # Check that the target file exists
+        if not (ROOT / target).exists():
+            missing_mappings.append(target)
+    
+    if missing_codes or missing_mappings:
+        return {
+            "router_contract": "FAIL",
+            "missing_codes": missing_codes,
+            "missing_mappings": missing_mappings
+        }
+    
+    return {"router_contract": "OK"}
+
 def check_determinism():
     """Verify build determinism by checking if multiple builds produce same hash."""
     if not COMPILED_FILE.exists():
@@ -78,13 +131,20 @@ def main():
     # Run all checks
     report["checks"]["forbidden_terms"] = check_forbidden_terms()
     report["checks"]["unicode"] = check_unicode_integrity()
+    report["checks"]["required_files"] = check_required_files()
+    report["checks"]["router_contract"] = check_router_contract()
     report["checks"]["determinism"] = check_determinism()
     
     # Check for failures
-    has_failures = False
+    has_failures = (
+        bool(report["checks"]["forbidden_terms"]["forbidden_terms"]) or
+        report["checks"]["unicode"]["unicode_check"] != "OK" or
+        bool(report["checks"]["required_files"]["required_missing"]) or
+        report["checks"]["router_contract"]["router_contract"] != "OK" or
+        report["checks"]["determinism"]["determinism"] != "OK"
+    )
     
     if report["checks"]["forbidden_terms"]["forbidden_terms"]:
-        has_failures = True
         print("❌ FORBIDDEN TERMS DETECTED:")
         for term in report["checks"]["forbidden_terms"]["forbidden_terms"]:
             print(f"   {term}")
@@ -92,13 +152,28 @@ def main():
         print("✅ Forbidden terms check: CLEAN")
     
     if report["checks"]["unicode"]["unicode_check"] != "OK":
-        has_failures = True
         print(f"❌ Unicode check: {report['checks']['unicode'].get('error', 'FAIL')}")
     else:
         print("✅ Unicode integrity: OK")
     
+    if report["checks"]["required_files"]["required_missing"]:
+        print("❌ REQUIRED FILES MISSING:")
+        for file in report["checks"]["required_files"]["required_missing"]:
+            print(f"   {file}")
+    else:
+        print("✅ Required files check: OK")
+    
+    if report["checks"]["router_contract"]["router_contract"] != "OK":
+        router_check = report["checks"]["router_contract"]
+        print(f"❌ Router contract check: {router_check.get('error', 'FAIL')}")
+        if "missing_codes" in router_check:
+            print(f"   Missing codes: {router_check['missing_codes']}")
+        if "missing_mappings" in router_check:
+            print(f"   Missing files: {router_check['missing_mappings']}")
+    else:
+        print("✅ Router contract check: OK")
+    
     if report["checks"]["determinism"]["determinism"] != "OK":
-        has_failures = True
         print(f"❌ Determinism check: {report['checks']['determinism'].get('error', 'Hash mismatch')}")
     else:
         print("✅ Deterministic build: OK")
@@ -115,9 +190,37 @@ def main():
         "## Checks:",
         f"- Forbidden Terms: {'FAIL' if report['checks']['forbidden_terms']['forbidden_terms'] else 'PASS'}",
         f"- Unicode Integrity: {report['checks']['unicode']['unicode_check']}",
+        f"- Required Files: {'FAIL' if report['checks']['required_files']['required_missing'] else 'PASS'}",
+        f"- Router Contract: {report['checks']['router_contract']['router_contract']}",
         f"- Deterministic Build: {report['checks']['determinism']['determinism']}",
         "",
     ]
+    
+    if report["checks"]["required_files"]["required_missing"]:
+        summary_lines.extend([
+            "## Missing Required Files:",
+            *[f"- {file}" for file in report["checks"]["required_files"]["required_missing"]],
+            ""
+        ])
+    
+    if report["checks"]["router_contract"]["router_contract"] != "OK":
+        summary_lines.extend([
+            "## Router Contract Issues:",
+            f"- Status: {report['checks']['router_contract']['router_contract']}",
+            ""
+        ])
+        if "missing_codes" in report["checks"]["router_contract"]:
+            summary_lines.extend([
+                "### Missing Route Codes:",
+                *[f"- {code}" for code in report["checks"]["router_contract"]["missing_codes"]],
+                ""
+            ])
+        if "missing_mappings" in report["checks"]["router_contract"]:
+            summary_lines.extend([
+                "### Missing Blueprint Files:",
+                *[f"- {file}" for file in report["checks"]["router_contract"]["missing_mappings"]],
+                ""
+            ])
     
     if report["checks"]["forbidden_terms"]["forbidden_terms"]:
         summary_lines.extend([
