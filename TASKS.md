@@ -54,6 +54,16 @@
 - [x] Updated version history to v1.2.0 reflecting hybrid architecture
 - [x] All documentation now consistent with current system capabilities
 
+### 1.10. [x] v1.2.1 Operational Polish ⚡ COMPLETE
+- [x] Created scripts/tools/gen_curation_index.py with deterministic output
+- [x] Created scripts/tools/manifest_guard.py with integrity validation
+- [x] Added Makefile targets: gen-curation-index, manifest-guard
+- [x] Integrated manifest-guard into QA chain for continuous validation
+- [x] Fixed Python 3.9 compatibility issues with typing annotations
+- [x] Added core/95-curation-index.md to curated sources before vendor appendix
+- [x] Updated baseline hash to a9655f5a for deterministic builds with curation index
+- [x] Tagged and pushed v1.2.1 with comprehensive operational improvements
+
 ### 2. Claude Code Automation Validation 🎯 HIGH
 - [ ] Test standard execution pattern with timeout management
 - [ ] Verify authentication status and tool permissions

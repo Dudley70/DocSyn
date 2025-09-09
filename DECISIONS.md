@@ -40,6 +40,14 @@
 **Result:** ✅ Successfully expanded from 4.6KB to 291KB (24x growth) while maintaining architectural integrity. New baseline hash 8d4125c5 established. Hybrid structure: vendor-neutral core + clearly marked vendor appendix. All QA gates passing with vendor-aware validation  
 **Impact:** Demonstrates successful hybrid architecture allowing both universal patterns and concrete vendor examples. Provides framework for any future vendor content while preserving neutrality of core sections. Maintains quality, determinism, and clear policy boundaries
 
+## v1.2.1 Operational Polish: Curation Index + Manifest Guard
+**Date:** 2025-09-09  
+**Status:** Active - Production Ready  
+**Problem:** After establishing hybrid architecture v1.2.0, needed operational improvements for manifest integrity and curation visibility. Contributors needed clear overview of curated sources with metadata (size, policy, word count). System needed validation to prevent broken manifest references and enforce vendor ordering rules  
+**Decision:** Implemented two focused operational tools: gen_curation_index.py creates deterministic markdown table from manifest with front-matter analysis, manifest_guard.py validates file existence, uniqueness, and vendor ordering constraints. Integrated manifest guard into QA chain. Included curation index in compiled output for self-documenting system  
+**Result:** ✅ Added 192 lines of operational tooling with zero breaking changes. New baseline a9655f5a includes curation index. Manifest integrity validation prevents configuration drift. Self-documenting system shows 17 curated sources with clear vendor/neutral classification. Python 3.9 compatible implementation  
+**Impact:** System is now self-documenting and self-validating. Contributors can see curation overview with metadata. Manifest integrity prevents configuration errors. Vendor ordering rules enforced automatically. Foundation for future curation workflow improvements
+
 ## CLI Workflow Simplification Decision  
 **Date:** 2025-09-09  
 **Status:** Active - Production Ready  

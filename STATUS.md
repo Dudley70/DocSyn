@@ -1,20 +1,23 @@
 # DocSyn Project Status
 
 ## Current System State
-**Phase:** Production-Ready Hybrid Documentation System  
+**Phase:** Production-Ready Hybrid Documentation System with Operational Polish  
 **Key Components:** 
 - Document Synthesiser: Vendor-neutral core + vendor-specific appendix architecture
 - Policy-aware QA: Intelligent handling of vendor-specific vs. neutral content
+- Operational Tools: Curated sources index + manifest integrity validation
 - Processing scripts: Raw sources → staged promotion → curated compilation → single output
-- Output: dist/DocSyn_Compiled.md (4,941 lines, 291KB) with comprehensive agent documentation
+- Output: dist/DocSyn_Compiled.md with comprehensive agent documentation + curation index
 
 **Last Validated:** 2025-09-09  
-**Status:** Working - Comprehensive hybrid system with successful vendor content integration
+**Status:** Working - v1.2.1 operational polish completed with self-documenting curation system
 
 ## Next Action
 **IMMEDIATE:** Claude Code automation validation  
 **PRIORITY:** High  
 **ESTIMATED TIME:** 1 hour
+
+**COMPLETED v1.2.1:** Operational polish with curation index and manifest guard
 
 **COMPLETED:** 
 - ✅ Staging cleaner integration - System now self-healing for duplicate files
@@ -25,6 +28,7 @@
 - ✅ Vendor appendix integration - 5 Claude-specific blueprints (265KB) added with clear separation
 - ✅ Quality gates maintained - All validation passing with deterministic builds
 - ✅ Documentation updates - All files updated to reflect v1.2.0 hybrid architecture
+- ✅ v1.2.1 Operational Polish - Curated sources index + manifest guard with deterministic output
 
 ## Recovery Information
 **Environment:** Document synthesis system  
@@ -38,10 +42,11 @@
 **Configuration:** 
 - Three-file documentation system (STATUS.md, TASKS.md, DECISIONS.md)
 - Policy-aware QA with vendor-specific content classification
-- Hybrid build manifest: 16 curated sources (3 core + 13 blueprints)
+- Hybrid build manifest: 17 curated sources (4 core + 13 blueprints)
+- Operational tools: gen-curation-index, manifest-guard integrated in QA
 - Makefile targets for build automation
-- Baseline verification system (hash: 8d4125c5)
-- Deterministic build process with vendor content support
+- Baseline verification system (hash: a9655f5a)
+- Deterministic build process with vendor content support + manifest validation
 
 **Restart Commands:**
 ```bash
