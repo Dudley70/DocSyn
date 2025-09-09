@@ -1,0 +1,6 @@
+# Adjust handles/teams to your org
+/build.manifest.json          @Dudley70
+/core/**                      @Dudley70
+/blueprints/**                @Dudley70
+/scripts/**                   @Dudley70
+/.github/workflows/**         @Dudley70

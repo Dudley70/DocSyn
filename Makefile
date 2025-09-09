@@ -21,7 +21,7 @@ code-lift:
 seed-from-sources:
 	@python3 scripts/seed_from_sources.py
 
-.PHONY: merge-from-sourced merge-apply pr-body ssot check router-test code-lift seed-from-sources clean-staging ci docsyn verify qa curator-analyze curator-plan curator-apply gen-curation-index manifest-guard
+.PHONY: merge-from-sourced merge-apply pr-body ssot check router-test code-lift seed-from-sources clean-staging ci docsyn verify qa curator-analyze curator-plan curator-apply gen-curation-index manifest-guard metrics
 
 clean-staging:
 	@python3 scripts/clean_staging_duplicates.py --delete --fail-if-leftovers
@@ -43,6 +43,9 @@ gen-curation-index: ## Generate deterministic curated sources index
 
 manifest-guard: ## Validate manifest integrity and vendor ordering
 	@python3 scripts/tools/manifest_guard.py --manifest build.manifest.json --root .
+
+metrics: ## Generate objective metrics for compiled output
+	@python3 scripts/tools/compiled_metrics.py --input dist/DocSyn_Compiled.md | tee dist/METRICS.txt
 
 ci: clean-staging
 	@python3 scripts/lift_code_blocks.py check

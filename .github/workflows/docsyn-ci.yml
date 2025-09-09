@@ -1,0 +1,85 @@
+name: docsyn-ci
+
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: docsyn-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # Optional deps; safe if no requirements.txt
+      - name: Install Python deps
+        run: pip install -r requirements.txt || true
+
+      - name: Build (deterministic)
+        run: make docsyn
+
+      - name: Generate curation index (idempotent)
+        run: make gen-curation-index
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: docsyn-dist
+          path: |
+            dist/DocSyn_Compiled.md
+            dist/PROMOTION_REPORT.json
+            dist/CLEAN_STAGING_REPORT.json
+            dist/QA_SUMMARY.txt
+            core/95-curation-index.md
+
+  qa:
+    name: qa
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Python deps
+        run: pip install -r requirements.txt || true
+
+      - name: Manifest guard (fails on broken manifest)
+        run: python3 scripts/manifest_guard.py
+
+      - name: Rebuild to verify determinism (same steps as build)
+        run: make docsyn
+
+      - name: Run QA gates
+        run: make qa
+
+      - name: Baseline verification
+        run: python3 scripts/verify_baseline.py
+
+      - name: Metrics (writes dist/METRICS.txt)
+        run: python3 scripts/tools/compiled_metrics.py --input dist/DocSyn_Compiled.md | tee dist/METRICS.txt
+
+      - name: Upload QA artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: docsyn-qa
+          path: |
+            dist/QA_SUMMARY.txt
+            dist/METRICS.txt
+            core/95-curation-index.md

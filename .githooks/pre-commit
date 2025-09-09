@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Fast structural checks
+python3 scripts/tools/manifest_guard.py --manifest build.manifest.json --root .
+
+# Lint front-matter if available (won't fail the commit)
+if [ -f scripts/tools/lint_front_matter.py ]; then
+  python3 scripts/tools/lint_front_matter.py || true
+fi
+
+# Keep the curation index fresh and tracked
+make gen-curation-index >/dev/null 2>&1 || true
+git add core/95-curation-index.md 2>/dev/null || true
