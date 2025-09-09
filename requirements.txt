@@ -1,3 +1,1 @@
-# DocSyn Python Dependencies
-# Required for QA build script (qa_build.py)
-PyYAML>=6.0.1
+pyyaml==6.0.2

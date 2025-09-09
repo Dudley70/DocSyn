@@ -9,9 +9,10 @@ import re
 import json
 import sys
 try:
-    import yaml
-except ImportError:
-    yaml = None
+    import yaml  # PyYAML
+except ModuleNotFoundError:
+    print("[ERROR] Missing dependency 'pyyaml'. Run: pip install -r requirements.txt")
+    raise
 import unicodedata
 from pathlib import Path
 
