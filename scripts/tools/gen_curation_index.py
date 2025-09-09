@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import argparse, json, os, re, sys
 from pathlib import Path
+from typing import Optional, Dict, List, Tuple
 
 FM_RE = re.compile(r"(?s)^\s*---\s*(.*?)\s*---\s*")
 H1_RE = re.compile(r"(?m)^\s*#\s+(.+?)\s*$")
@@ -8,7 +9,7 @@ H1_RE = re.compile(r"(?m)^\s*#\s+(.+?)\s*$")
 def read_text(p: Path) -> str:
     return p.read_text(encoding="utf-8", errors="strict")
 
-def parse_front_matter(text: str) -> dict:
+def parse_front_matter(text: str) -> Dict[str, any]:
     m = FM_RE.match(text)
     if not m:
         return {}
@@ -30,19 +31,19 @@ def strip_front_matter(text: str) -> str:
     m = FM_RE.match(text)
     return text[m.end():] if m else text
 
-def first_h1(text: str) -> str | None:
+def first_h1(text: str) -> Optional[str]:
     m = H1_RE.search(text)
     return m.group(1).strip() if m else None
 
 def words_count(s: str) -> int:
     return len(re.findall(r"\b\w+\b", s, flags=re.UNICODE))
 
-def is_vendor(fm: dict) -> bool:
+def is_vendor(fm: Dict[str, any]) -> bool:
     pol = (fm.get("policy") or "").lower()
     tags = [t.lower() for t in (fm.get("tags") or [])]
     return pol == "vendor-specific" or "vendor" in tags
 
-def section_label(fm: dict, path: Path) -> str:
+def section_label(fm: Dict[str, any], path: Path) -> str:
     if "part" in fm:
         return f"Part {fm['part'].strip()}"
     if "blueprint" in fm:

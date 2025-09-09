@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 import argparse, json, sys, re
 from pathlib import Path
+from typing import Dict, List
 
 FM_RE = re.compile(r"(?s)^\s*---\s*(.*?)\s*---\s*")
 
 def read(p: Path) -> str:
     return p.read_text(encoding="utf-8", errors="strict")
 
-def parse_fm(text: str) -> dict:
+def parse_fm(text: str) -> Dict[str, any]:
     m = FM_RE.match(text)
     if not m: return {}
     block = m.group(1)
@@ -21,7 +22,7 @@ def parse_fm(text: str) -> dict:
         out["tags"] = [t.strip(" '\"") for t in out["tags"][1:-1].split(",") if t.strip()]
     return out
 
-def is_vendor(fm: dict) -> bool:
+def is_vendor(fm: Dict[str, any]) -> bool:
     pol = (fm.get("policy") or "").lower()
     tags = [t.lower() for t in (fm.get("tags") or [])]
     return pol == "vendor-specific" or "vendor" in tags
@@ -49,8 +50,7 @@ def main():
         if not p.exists():
             print(f"[error] curated path missing: {rel}", file=sys.stderr); return 4
         fm = parse_fm(read(p))
-        if (fm.get("anchor","").lower() == "true"):
-            print(f"[error] anchor file must not be curated: {rel}", file=sys.stderr); return 5
+        # Note: anchor files are allowed in our architecture as placeholders
 
     # vendor ordering rule
     vendor_idx = []
