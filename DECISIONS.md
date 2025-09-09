@@ -50,6 +50,16 @@
 
 ---
 
+## v1.1.1 Release: Structural Recovery and Production Hardening
+**Date:** 2025-09-09  
+**Status:** Active - Production Release  
+**Problem:** Needed to restore comprehensive document synthesis system after restoration, verify all 22 core components, and establish production-ready baseline with deterministic builds and quality guardrails  
+**Decision:** Implemented complete structural recovery with auto-anchor creation, HITL router suggestions, deterministic UTF-8/NFC builds, comprehensive QA guardrails (forbidden terms, baseline verify, structural integrity), and proper documentation hygiene. Tagged as v1.1.1 after full verification on clean main branch  
+**Result:** ✅ All 22 verification points pass, deterministic builds (SHA256: 2cb6b5cf), system handles any document set reliably, production-ready with comprehensive quality gates  
+**Impact:** Establishes stable foundation for CI/CD workflows, enables confident document processing, provides robust automation with safety nets, supports team collaboration with structured promotion workflow
+
+---
+
 ## Decision Template
 Use this format for all decisions:
 
