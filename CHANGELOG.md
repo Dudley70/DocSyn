@@ -1,6 +1,68 @@
-# DocSyn v1.1.0 Release Notes
+# DocSyn Release Notes
 
-## Major Features
+## v1.2.1 - Operational Polish (2025-09-09)
+
+### 🎯 New Features
+
+#### Curated Sources Index
+- **Self-documenting system** with `make gen-curation-index`
+- **Real-time metadata** showing size, policy, word count for all curated sources
+- **Deterministic generation** from `build.manifest.json`
+- **Included in compiled output** for complete self-documentation
+
+#### Manifest Guard
+- **Integrity validation** with `make manifest-guard`
+- **File existence checking** prevents broken manifest references
+- **Duplicate detection** ensures manifest uniqueness
+- **Vendor ordering enforcement** validates hybrid architecture rules
+- **Integrated into QA chain** runs automatically on every build
+
+### 🔧 Operational Improvements
+- **Zero breaking changes** - seamless integration with existing workflows
+- **Python 3.9 compatibility** with proper typing annotations
+- **192 lines of focused tooling** providing maximum value with minimal surface area
+- **Enhanced QA chain** with manifest validation as prerequisite
+
+### 📊 System Scale
+- **17 curated sources** (4 core + 13 blueprints)
+- **New baseline**: `a9655f5a` includes curation index
+- **Self-documenting** system shows policy classification and metrics
+
+---
+
+## v1.2.0 - Hybrid Architecture (2025-09-09)
+
+### 🏗️ Major Architecture Change
+
+#### Hybrid Content Model
+- **Vendor-neutral core** preserving universal patterns
+- **Vendor-specific appendix** allowing concrete implementation examples
+- **Policy-aware QA** intelligently classifies content by vendor vs. neutral
+- **Clear separation** with explicit vendor appendix header
+
+#### Policy-Aware Quality Assurance
+- **Smart content classification** via front-matter analysis
+- **Vendor-specific warnings** (allowed) vs. neutral errors (blocked)
+- **24x content expansion** from 4.6KB to 291KB while maintaining quality
+- **Deterministic builds** with vendor content support
+
+### 📈 Content Scale Achievement
+- **291KB compiled output** with comprehensive agent documentation
+- **16 curated sources** including 5 vendor-specific implementations
+- **Hybrid structure** demonstrates both universal patterns and concrete examples
+- **Quality gates maintained** throughout massive content expansion
+
+### 🛡️ Enhanced QA System
+- **Front-matter policy parsing** for automatic content classification
+- **Anchor file exemptions** for small blueprint files via `anchor: true`
+- **Vendor ordering validation** ensures proper architectural separation
+- **Baseline verification** with new hash `8d4125c5` → `a9655f5a`
+
+---
+
+## v1.1.0 - Production Foundation (2025-09-09)
+
+### Major Features
 
 ### Simplified Workflow
 - **`make docsyn`** - Single command for complete pipeline (promote → build → validate)

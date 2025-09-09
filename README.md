@@ -24,6 +24,8 @@ cp your-docs.md merge_pr/updated/
 
 # Process and build  
 make docsyn                 # Complete pipeline: promote + build + validate
+make gen-curation-index    # Generate curated sources overview
+make manifest-guard        # Validate manifest integrity
 ```
 
 **Output:** `dist/DocSyn_Compiled.md` - The compiled knowledge base
@@ -57,27 +59,31 @@ make docsyn
 ## Core Commands
 
 ```bash
-make docsyn        # Complete pipeline (recommended)
-make verify        # Verify output matches baseline hash
-make qa            # Run quality assurance checks
-make ci            # CI pipeline with staging cleanup
-make clean-staging # Remove duplicate files from staging
-make seed-from-sources # Extract content from sources/raw/
+make docsyn               # Complete pipeline (recommended)
+make verify               # Verify output matches baseline hash
+make qa                   # Run quality assurance + manifest validation
+make ci                   # CI pipeline with staging cleanup
+make clean-staging        # Remove duplicate files from staging
+make gen-curation-index   # Generate deterministic curated sources index
+make manifest-guard       # Validate manifest integrity and vendor ordering
+make seed-from-sources    # Extract content from sources/raw/
 ```
 
 ## Project Structure
 
 ```
 DocSyn/
-├── core/                    # Global sections (router, risks, environment)
-├── blueprints/              # Curated content modules (universal templates)
+├── core/                    # Global sections (router, risks, environment, curation index)
+├── blueprints/              # Curated content modules (universal templates + vendor examples)
 ├── sources/raw/             # Bulk document input (for seed-from-sources)
 ├── merge_pr/updated/        # Staging area for direct document input
 ├── scripts/                 # Build and validation scripts
+│   └── tools/               # Operational tools (curation index, manifest guard)
 ├── dist/                    # Generated outputs
-│   ├── DocSyn_Compiled.md   # Main compiled output
+│   ├── DocSyn_Compiled.md   # Main compiled output (with curation index)
 │   ├── QA_SUMMARY.txt       # Quality assurance report
-│   └── QA_REPORT.json       # Detailed QA data
+│   ├── QA_REPORT.json       # Detailed QA data
+│   └── CLEAN_STAGING_REPORT.json # Staging cleanup report
 ├── tests/                   # Quality baselines
 │   └── BASELINE_SHA256      # Expected output hash
 ├── STRUCTURAL_CONTRACT.md   # Infrastructure preservation guide
@@ -95,14 +101,16 @@ DocSyn/
 
 ## Quality Assurance
 
-DocSyn v1.1.0+ includes comprehensive policy-aware quality gates:
+DocSyn v1.2.1+ includes comprehensive policy-aware quality gates with operational tools:
 
+- **Curated Sources Index**: Self-documenting system showing all curated content with metadata
+- **Manifest Guard**: Validates file existence, prevents duplicates, enforces vendor ordering
 - **Policy-Aware Validation**: Intelligent classification of vendor-specific vs. vendor-neutral content
 - **Hybrid Content Support**: Vendor terms allowed in marked vendor files, forbidden in neutral core
 - **Structural Integrity**: Ensures automation infrastructure is intact
 - **Anchor File Support**: Small blueprint files exempt from size requirements via `anchor: true`
 - **Router Contract**: Validates route codes and blueprint mappings
-- **Baseline Verification**: `make verify` ensures consistent output (current: 8d4125c5)
+- **Baseline Verification**: `make verify` ensures consistent output (current: a9655f5a)
 - **Deterministic Assembly**: Identical inputs always produce identical output
 - **Unicode Support**: Proper handling of international characters
 - **Cross-Platform**: Consistent behavior across operating systems
@@ -127,7 +135,7 @@ anchor: true
 
 - **Hybrid Architecture**: Vendor-neutral core + vendor-specific appendix with clear separation
 - **Policy-Aware QA**: Intelligent content classification and validation
-- **Deterministic Builds**: Same input always produces same output hash (current: 8d4125c5)
+- **Deterministic Builds**: Same input always produces same output hash (current: a9655f5a)
 - **Global Deduplication**: Prevents duplicate sections across modules
 - **Multiple Input Methods**: Direct staging or bulk source processing
 - **Quality Gates**: Comprehensive QA with policy-aware validation
@@ -136,7 +144,9 @@ anchor: true
 - **Unicode Support**: Proper handling of international characters
 - **Cross-Platform**: Consistent behavior across operating systems
 - **Vendor Content Support**: Framework for including vendor examples while preserving neutrality
-- **Anchor File System**: Small blueprint files with size requirement exemptions
+- **Self-Documenting System**: Curated sources index provides real-time metadata visibility
+- **Manifest Validation**: Prevents configuration drift and broken references
+- **Operational Tools**: gen-curation-index and manifest-guard for enhanced workflows
 
 ## For New Document Batches
 
@@ -171,21 +181,22 @@ shasum -a 256 dist/DocSyn_Compiled.md | awk '{print $1}' > tests/BASELINE_SHA256
 # Verify against baseline
 make verify
 
-# Current baseline: 8d4125c5 (291KB, 4,941 lines)
+# Current baseline: a9655f5a (includes curation index)
 ```
 
 ## Current System Scale
 
 **Output Statistics:**
-- **Size**: 291KB (4,941 lines)
-- **Sources**: 16 curated files (3 core + 13 blueprints)
-- **Architecture**: Hybrid vendor-neutral + vendor-specific
-- **Hash**: 8d4125c5 (deterministic baseline)
+- **Size**: ~293KB+ (with curation index)
+- **Sources**: 17 curated files (4 core + 13 blueprints)
+- **Architecture**: Hybrid vendor-neutral + vendor-specific with self-documentation
+- **Hash**: a9655f5a (deterministic baseline including curation index)
 
 **Content Breakdown:**
-- **Core (Vendor-Neutral)**: ~26KB - Universal agent patterns and development environment
-- **Appendix (Vendor-Specific)**: ~265KB - Claude implementation examples and detailed guides
-- **Quality Gates**: 8 policy checks passing with vendor-aware validation
+- **Core (Vendor-Neutral)**: Universal agent patterns, development environment, curation index
+- **Appendix (Vendor-Specific)**: Claude implementation examples and detailed guides
+- **Quality Gates**: 8 policy checks + manifest validation with vendor-aware classification
+- **Operational Tools**: Curated sources index + manifest integrity validation
 
 ## Requirements
 
@@ -195,6 +206,7 @@ make verify
 
 ## Version History
 
+**v1.2.1** - Operational polish: curated sources index + manifest guard with self-documenting system  
 **v1.2.0** - Hybrid architecture, policy-aware QA, vendor appendix integration  
 **v1.1.0** - Deterministic builds, verification gates, comprehensive testing  
 **v1.0.0** - Initial release
