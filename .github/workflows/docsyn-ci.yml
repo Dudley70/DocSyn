@@ -25,9 +25,10 @@ jobs:
         with:
           python-version: '3.11'
 
-      # Optional deps; safe if no requirements.txt
       - name: Install Python deps
-        run: pip install -r requirements.txt || true
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r scripts/requirements.txt
 
       - name: Build (deterministic)
         run: make docsyn
@@ -58,10 +59,12 @@ jobs:
           python-version: '3.11'
 
       - name: Install Python deps
-        run: pip install -r requirements.txt || true
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r scripts/requirements.txt
 
       - name: Manifest guard (fails on broken manifest)
-        run: python3 scripts/manifest_guard.py
+        run: python3 scripts/tools/manifest_guard.py --manifest build.manifest.json --root .
 
       - name: Rebuild to verify determinism (same steps as build)
         run: make docsyn

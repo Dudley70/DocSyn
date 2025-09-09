@@ -4,6 +4,9 @@
 
 **Hybrid Architecture:** Vendor-neutral core + vendor-specific appendix with policy-aware validation
 
+[![docsyn-ci](https://github.com/Dudley70/DocSyn/actions/workflows/docsyn-ci.yml/badge.svg)](https://github.com/Dudley70/DocSyn/actions/workflows/docsyn-ci.yml)
+[![nightly-qa](https://github.com/Dudley70/DocSyn/actions/workflows/nightly-qa.yml/badge.svg)](https://github.com/Dudley70/DocSyn/actions/workflows/nightly-qa.yml)
+
 ```
 sources → staging → promotion → policy-aware build → DocSyn_Compiled.md
                                         │

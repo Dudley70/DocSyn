@@ -1,0 +1,45 @@
+name: nightly-qa
+
+on:
+  schedule:
+    - cron: '0 4 * * *'   # 04:00 UTC daily
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  qa:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r scripts/requirements.txt
+
+      - name: Build & QA
+        run: |
+          make docsyn
+          python3 scripts/tools/manifest_guard.py --manifest build.manifest.json --root .
+          make qa
+          python3 scripts/verify_baseline.py
+
+      - name: Metrics snapshot
+        run: |
+          python3 scripts/tools/compiled_metrics.py --input dist/DocSyn_Compiled.md | tee dist/METRICS.txt
+
+      - name: Upload nightly artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: nightly-qa
+          path: |
+            dist/DocSyn_Compiled.md
+            dist/QA_SUMMARY.txt
+            dist/METRICS.txt
+            core/95-curation-index.md
