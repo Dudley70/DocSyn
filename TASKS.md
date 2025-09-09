@@ -73,6 +73,13 @@
 - [x] System scalability: Handles additional vendor content without quality degradation
 - [x] Operational workflow: Deterministic builds with policy-aware QA maintained
 
+### 2.1. [x] Documentation Updates for v1.2.1 ⚡ COMPLETE
+- [x] Updated README.md with operational tools and current baseline (a9655f5a)
+- [x] Updated STRUCTURAL_CONTRACT.md with new infrastructure files
+- [x] Updated CHANGELOG.md with comprehensive v1.2.1 and v1.2.0 release notes
+- [x] Updated CONTRIBUTING.md with current workflows and hybrid architecture
+- [x] All documentation now reflects self-documenting system capabilities
+
 ### 3. CI & Protections Setup 🎯 IMMEDIATE
 - [ ] Create GitHub Actions workflow (.github/workflows/ci.yml)
 - [ ] Add workflow steps: make docsyn, verify_baseline.py, qa_build.py
